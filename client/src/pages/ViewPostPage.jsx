@@ -1,30 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import useBlogPosts from "../hooks/useBlogPosts";
 
 function ViewPostPage() {
   const navigate = useNavigate();
-
-  const [posts, setPosts] = useState([]);
-  const [isError, setIsError] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
-
-  const getPosts = async () => {
-    try {
-      setIsError(false);
-      setIsLoading(true);
-      const results = await axios("http://localhost:4000/posts");
-      setPosts(results.data.data);
-      setIsLoading(false);
-    } catch (error) {
-      setIsError(true);
-    }
-  };
-
-  useEffect(() => {
-    getPosts();
-  }, []);
-
+  const { posts, isError, isLoading } = useBlogPosts();
   return (
     <div>
       <h1>View Post Page</h1>
@@ -49,7 +28,6 @@ function ViewPostPage() {
         {isError ? <h1>Request failed</h1> : null}
         {isLoading ? <h1>Loading ....</h1> : null}
       </div>
-
       <button onClick={() => navigate("/")}>Back to Home</button>
     </div>
   );
